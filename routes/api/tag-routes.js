@@ -3,26 +3,52 @@ const { Tag, Product, ProductTag } = require("../../models");
 
 // The `/api/tags` endpoint
 
-router.get("/", (req, res) => {
-  Tag.findAll;
-  // be sure to include its associated Product data
+router.get("/", async (req, res) => {
+  const tag = await Tag.findAll({
+    include: {
+      model: Product,
+      attributes: ["product_name", "price", "stock", "category_id"],
+    },
+  });
+  res.json(tag);
 });
 
-router.get("/:id", (req, res) => {
-  Tag.findOne;
-  // be sure to include its associated Product data
+router.get("/:id", async (req, res) => {
+  const tag = await Tag.findOne({
+    where: {
+      id: req.params.id,
+    },
+    include: {
+      model: Product,
+      attributes: ["product_name", "price", "stock", "category_id"],
+    },
+  });
+  res.json(tag);
 });
 
-router.post("/", (req, res) => {
-  Tag.create;
+router.post("/", async (req, res) => {
+  const tag = await Tag.create({
+    tag_name: req.body.tag_name,
+  });
+  res.json(tag);
 });
 
-router.put("/:id", (req, res) => {
-  Tag.update;
+router.put("/:id", async (req, res) => {
+  const tag = await Tag.update(req.body, {
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.json(tag);
 });
 
-router.delete("/:id", (req, res) => {
-  Tag.destroy;
+router.delete("/:id", async (req, res) => {
+  const tag = await Tag.destroy({
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.json(tag);
 });
 
 module.exports = router;
